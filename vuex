@@ -2,6 +2,7 @@
 1.Vuex 的状态存储是响应式的。当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新。
 2.你不能直接改变 store 中的状态。改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation。这样使得我们可以方便地跟踪每一个状态的变化，从而让我们能够实现一些工具帮助我们更好地了解我们的应用。
 
+//---------------------------------state
 import {mapState} from 'vuex'
 1.
 computed: mapState({
@@ -22,12 +23,53 @@ computed: mapState([
         //...
     }
 }
+//---------------------------------getter
+Vuex 允许我们在 store 中定义“getter”（可以认为是 store 的计算属性）。就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。
 
+let store = new Vuex.store({
+        state: {
+                age: 1,
+                count: 2,
+                persons: [
+                        {name: 1, age: 2},
+                        {name: 2, age: 3}
+                ]
+        },
+        getters: {
+                getAgeGT1(state){
+                        return persons.filter(person => person.age > 1);
+                }
+        }
+});
+通过属性访问
+Getter 会暴露为 store.getters 对象，你可以以属性的形式访问这些值：
+func(){
+        return this.$store.getters.getAgeGT1;
+}
+通过方法访问
+你也可以通过让 getter 返回一个函数，来实现给 getter 传参。在你对 store 里的数组进行查询时非常有用。
+getters: {
+  // ...
+  getTodoById: (state) => (id) => {
+    return state.todos.find(todo => todo.id === id)
+  }
+}
+store.getters.getTodoById(2) // -> { id: 2, text: '...', done: false }
+注意，getter 在通过方法访问时，每次都会去进行调用，而不会缓存结果。
 
+#mapGetters 辅助函数
+mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性：
 
-
-
-
+computed: {
+        ...mapGetters([//原名字
+                'count', 
+                'age'
+        ]),
+         ...mapGetters({//该名字
+                count1: 'count',
+                age2: 'age'
+         }),
+}
 
 
 
