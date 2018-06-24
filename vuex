@@ -70,7 +70,72 @@ computed: {
                 age2: 'age'
          }),
 }
+//---------------------------------mutations
+更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数：
+mutations: {
+        inrement(state){
+                state.age ++;
+        }
+}
+//不能直接调用mutations,只能通过出发事件函数来调用 store.commit('increment', payload),可以传入第二个参数给mutations
+一般风格提交方式
+store.commit('increment', {
+        count: '1'
+})
+对象风格的提交方式
+提交 mutation 的另一种方式是直接使用包含 type 属性的对象：
+store.commit({
+  type: 'increment',
+  amount: 10
+})
 
+//-Mutation 需遵守 Vue 的响应规则
+1.既然 Vuex 的 store 中的状态是响应式的，那么当我们变更状态时，监视状态的 Vue 组件也会自动更新。这也意味着 Vuex 中的 mutation 也需要与使用 Vue 一样遵守一些注意事项：
+2.最好提前在你的 store 中初始化好所有所需属性。
+3.当需要在对象上添加新属性时，你应该使用 Vue.set(obj, 'newProp', 123), 或者以新对象替换老对象。例如，利用 stage-3 的对象展开运算符我们可以这样写：state.obj = { ...state.obj, newProp: 123 }
+4.mutations 必须是同步函数
+//-
+可以使用常亮来代替mutations的类型
+import {MUTATIONS_TYPE} from ('mutations_type.js')
+mutations: {
+        [MUTATIONS_TYPE](state){
+                //...
+        }
+}
+//-可以映射到子组件的methods里
+methods: {
+        ...mapMutations({
+               myage: 'age',
+        }),
+        ...mapMutations([
+                'age',
+                'count'
+        ])
+}
+//-----------------------------------------------------actions
+Actions
+Actions 类似于 mutation，不同在于：
+Actions 提交的是 mutation，而不是直接变更状态。
+Actions 可以包含任意异步操作。
+
+import {mapActions} from 'vuex'
+export default {
+        methods: {
+                ...mapActoins(['age','count']),
+                ...mapActions({
+                        myage: 'age',
+                        mycount: 'count'
+                }),
+        }
+}
+actoins: {
+        async incrmentA({commit, dispatch}, num){
+                return commit('add', {num});
+        },
+        async incrementB({dispatch, commit}, age){
+                return commit('add', await dispatch('increment', age));
+        }
+}
 
 
 
