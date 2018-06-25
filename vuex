@@ -137,14 +137,54 @@ actoins: {
         }
 }
 
+//--------------------------------------------------------插件
+Vuex的plugins选项接受一个函数,这个选项暴露出mutations的钩子,是的使用者可以监听到每次mutatio的每次执行;
+
+const ageChangeMutationPlugin = (store) => {
+        store.subscribe((mutation, state) => {
+                //每次mutations执行之后就会触发这个函数,mutations结构为{type, payload}
+                if(mutations.type == 'ageChangeMutation'){
+                        //...
+                }
+        })
+}
+const store = new vux.store({
+        modules: {
+                a: moduleA,
+                b: moduleB
+        },
+        plugins:[ageChangeMutationPlugin]
+});
+
+//--------------------------------------------------------严格模式
+const store = new vuex.store({
+        strict: true,//会把没有通过mutations改变状态的操作揪取出来并报错, 生产环境下不建议使用,会耗费性能
+        strict: process.env.NODE_ENV !== 'production'
+})
+//严格模式下表单的处理
+<input v-model="message">//message是this.$store.state.mes,严格模式下不允许直接改变store中的值,所以必须另辟蹊径
+1.添加事件监听函数
+<input v-model="message" @change="updateMsg">
+methods: {
+        updateMsg(e){
+                this.$store.commit('updateMsg', e.target.value);
+        }
+}
+2.使用双向计算绑定属性
+computed: {
+        message: {
+                get: () => {this.$store.state.message},
+                set: (mes) => {this.$store.commit('updateMsg', mes)}
+        }
+}
+mutations: {
+        updateMsg(state, mes){
+                state.message = payload.mes;
+        }
+}
 
 
-
-
-
-
-
-
+//------------------------------------------------------小例子
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
