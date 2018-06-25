@@ -25,7 +25,6 @@ computed: mapState([
 }
 //---------------------------------getter
 Vuex 允许我们在 store 中定义“getter”（可以认为是 store 的计算属性）。就像计算属性一样，getter 的返回值会根据它的依赖被缓存起来，且只有当它的依赖值发生了改变才会被重新计算。
-
 let store = new Vuex.store({
         state: {
                 age: 1,
@@ -56,7 +55,6 @@ getters: {
 }
 store.getters.getTodoById(2) // -> { id: 2, text: '...', done: false }
 注意，getter 在通过方法访问时，每次都会去进行调用，而不会缓存结果。
-
 #mapGetters 辅助函数
 mapGetters 辅助函数仅仅是将 store 中的 getter 映射到局部计算属性：
 
@@ -70,6 +68,9 @@ computed: {
                 age2: 'age'
          }),
 }
+
+
+
 //---------------------------------mutations
 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation。Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数：
 mutations: {
@@ -88,7 +89,6 @@ store.commit({
   type: 'increment',
   amount: 10
 })
-
 //-Mutation 需遵守 Vue 的响应规则
 1.既然 Vuex 的 store 中的状态是响应式的，那么当我们变更状态时，监视状态的 Vue 组件也会自动更新。这也意味着 Vuex 中的 mutation 也需要与使用 Vue 一样遵守一些注意事项：
 2.最好提前在你的 store 中初始化好所有所需属性。
@@ -112,12 +112,14 @@ methods: {
                 'count'
         ])
 }
+
+
+
 //-----------------------------------------------------actions
 Actions
 Actions 类似于 mutation，不同在于：
 Actions 提交的是 mutation，而不是直接变更状态。
 Actions 可以包含任意异步操作。
-
 import {mapActions} from 'vuex'
 export default {
         methods: {
@@ -137,9 +139,10 @@ actoins: {
         }
 }
 
+
+
 //--------------------------------------------------------插件
 Vuex的plugins选项接受一个函数,这个选项暴露出mutations的钩子,是的使用者可以监听到每次mutatio的每次执行;
-
 const ageChangeMutationPlugin = (store) => {
         store.subscribe((mutation, state) => {
                 //每次mutations执行之后就会触发这个函数,mutations结构为{type, payload}
@@ -155,6 +158,8 @@ const store = new vux.store({
         },
         plugins:[ageChangeMutationPlugin]
 });
+
+
 
 //--------------------------------------------------------严格模式
 const store = new vuex.store({
