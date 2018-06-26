@@ -1,0 +1,34 @@
+let date = new Date();
+
+1. date
+Tue Jun 26 2018 18:35:09 GMT+0800 (中国标准时间)
+
+2. date.toDateString()
+"Tue Jun 26 2018"
+
+3. date.toGMTString()
+"Tue, 26 Jun 2018 10:35:09 GMT"
+
+4. date.toISOString()
+"2018-06-26T10:35:09.189Z"
+
+5. date.toJSON()
+"2018-06-26T10:35:09.189Z"
+
+6. date.toLocaleDateString()
+"2018/6/26"
+
+7.date.toLocaleString()
+"2018/6/26 下午6:35:09"
+
+8. date.toLocaleTimeString()
+"下午6:35:09"
+
+9. date.toString()
+"Tue Jun 26 2018 18:35:09 GMT+0800 (中国标准时间)"
+
+10. date.toTimeString()
+"18:35:09 GMT+0800 (中国标准时间)"
+
+11. date.toUTCString()
+"Tue, 26 Jun 2018 10:35:09 GMT"
